@@ -11,3 +11,4 @@ saves/
 .vscode/
 .idea/
 External/KSPManaged/*.dll
+diagrams/

@@ -54,11 +54,12 @@ namespace DarkMultiPlayer
         private PlayerColorWorker playerColorWorker;
         private GroupsWindow groupsWindow;
         private PermissionsWindow permissionsWindow;
+        private MilestonesWindow milestonesWindow;
         private NamedAction updateAction;
         private NamedAction drawAction;
         private StringBuilder stringBuilder = new StringBuilder(128);
 
-        public PlayerStatusWindow(DMPGame dmpGame, Settings dmpSettings, WarpWorker warpWorker, ChatWorker chatWorker, CraftLibraryWorker craftLibraryWorker, ScreenshotWorker screenshotWorker, TimeSyncer timeSyncer, PlayerStatusWorker playerStatusWorker, OptionsWindow optionsWindow, PlayerColorWorker playerColorWorker, GroupsWindow groupsWindow, PermissionsWindow permissionsWindow)
+        public PlayerStatusWindow(DMPGame dmpGame, Settings dmpSettings, WarpWorker warpWorker, ChatWorker chatWorker, CraftLibraryWorker craftLibraryWorker, ScreenshotWorker screenshotWorker, TimeSyncer timeSyncer, PlayerStatusWorker playerStatusWorker, OptionsWindow optionsWindow, PlayerColorWorker playerColorWorker, GroupsWindow groupsWindow, PermissionsWindow permissionsWindow, MilestonesWindow milestonesWindow)
         {
             this.dmpGame = dmpGame;
             this.dmpSettings = dmpSettings;
@@ -72,6 +73,7 @@ namespace DarkMultiPlayer
             this.playerColorWorker = playerColorWorker;
             this.groupsWindow = groupsWindow;
             this.permissionsWindow = permissionsWindow;
+            this.milestonesWindow = milestonesWindow;
             updateAction = new NamedAction(Update);
             drawAction = new NamedAction(Draw);
             this.dmpGame.updateEvent.Add(updateAction);
@@ -197,6 +199,7 @@ namespace DarkMultiPlayer
             craftLibraryWorker.display = GUILayout.Toggle(craftLibraryWorker.display, "Craft", buttonStyle);
             groupsWindow.display = GUILayout.Toggle(groupsWindow.display, "Group", buttonStyle);
             permissionsWindow.display = GUILayout.Toggle(permissionsWindow.display, "Permissions", buttonStyle);
+            milestonesWindow.display = GUILayout.Toggle(milestonesWindow.display, "Milestones", buttonStyle);
             GUIStyle screenshotButtonStyle = buttonStyle;
             if (screenshotWorker.screenshotButtonHighlighted)
             {

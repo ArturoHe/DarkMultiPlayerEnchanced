@@ -120,6 +120,11 @@ SYNC_TIME_REQUEST: long - Client send time (1/4 parts of a valid NTP message)
 
 PING_REQUEST: long - Client send time
 
+MILESTONE:
+int - Milestone message type
+--MILESTONE_REQUEST--
+null - Requests the full milestone table from server
+
 ===Server only===
 HANDSHAKE_REPLY: int - Handshake status
 0 - Success
@@ -159,5 +164,17 @@ long - server send time (3/4 parts of a valid NTP message).
 PING_REPLY:
 long - client send time
 long server send time.
+
+MILESTONE:
+int - Milestone message type
+--MILESTONE_RESET--
+null - Clear local milestone table before sync
+--MILESTONE_INFO--
+string - milestone key
+string - milestone title
+string - player name that unlocked it first
+long - UTC ticks when unlocked
+--MILESTONE_SYNCED--
+null - Marks end of milestone sync batch
 
 TODO: Actually write documentation on how my message writer works. The code is here anyway, this is how I built the MessageWriter.dll file: https://github.com/godarklight/BinarySerialiser

@@ -26,6 +26,7 @@ namespace DarkMultiPlayerServer.Messages
                 bool isFlyingUpdate = mr.Read<bool>();
                 byte[] possibleCompressedBytes = mr.Read<byte[]>();
                 byte[] vesselData = Compression.DecompressIfNeeded(possibleCompressedBytes);
+                bool milestonesChanged = MilestoneSystem.TryRegisterFromVesselProto(client.playerName, vesselGuid, vesselData, isDockingUpdate);
                 if (isFlyingUpdate)
                 {
                     DarkLog.Debug("Relaying FLYING vessel " + vesselGuid + " from " + client.playerName);
@@ -91,6 +92,10 @@ namespace DarkMultiPlayerServer.Messages
                     }
                 }
                 ClientHandler.SendToAllAutoCompressed(client, newCompressedMessage, newDecompressedMessage, false);
+                if (milestonesChanged)
+                {
+                    Messages.MilestoneMessage.SendMilestonesToAll();
+                }
             }
         }
 

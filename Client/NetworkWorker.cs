@@ -74,6 +74,7 @@ namespace DarkMultiPlayer
         private TimeSyncer timeSyncer;
         private Groups groups;
         private Permissions permissions;
+        private Milestones milestones;
         private WarpWorker warpWorker;
         private ChatWorker chatWorker;
         private PlayerColorWorker playerColorWorker;
@@ -113,7 +114,7 @@ namespace DarkMultiPlayer
             dmpGame.updateEvent.Add(updateAction);
         }
 
-        public void SetDependencies(TimeSyncer timeSyncer, WarpWorker warpWorker, ChatWorker chatWorker, PlayerColorWorker playerColorWorker, FlagSyncer flagSyncer, PartKiller partKiller, KerbalReassigner kerbalReassigner, AsteroidWorker asteroidWorker, VesselWorker vesselWorker, PlayerStatusWorker playerStatusWorker, ScenarioWorker scenarioWorker, DynamicTickWorker dynamicTickWorker, CraftLibraryWorker craftLibraryWorker, ScreenshotWorker screenshotWorker, ToolbarSupport toolbarSupport, AdminSystem adminSystem, LockSystem lockSystem, DMPModInterface dmpModInterface, UniverseSyncCache universeSyncCache, VesselRecorder vesselRecorder, Groups groups, Permissions permissions, ModpackWorker modpackWorker)
+        public void SetDependencies(TimeSyncer timeSyncer, WarpWorker warpWorker, ChatWorker chatWorker, PlayerColorWorker playerColorWorker, FlagSyncer flagSyncer, PartKiller partKiller, KerbalReassigner kerbalReassigner, AsteroidWorker asteroidWorker, VesselWorker vesselWorker, PlayerStatusWorker playerStatusWorker, ScenarioWorker scenarioWorker, DynamicTickWorker dynamicTickWorker, CraftLibraryWorker craftLibraryWorker, ScreenshotWorker screenshotWorker, ToolbarSupport toolbarSupport, AdminSystem adminSystem, LockSystem lockSystem, DMPModInterface dmpModInterface, UniverseSyncCache universeSyncCache, VesselRecorder vesselRecorder, Groups groups, Permissions permissions, Milestones milestones, ModpackWorker modpackWorker)
         {
             this.timeSyncer = timeSyncer;
             this.warpWorker = warpWorker;
@@ -137,6 +138,7 @@ namespace DarkMultiPlayer
             this.vesselRecorder = vesselRecorder;
             this.groups = groups;
             this.permissions = permissions;
+            this.milestones = milestones;
             this.modpackWorker = modpackWorker;
             vesselRecorder.SetHandlers(HandleVesselProto, HandleVesselUpdate, HandleVesselRemove);
         }
@@ -267,6 +269,7 @@ namespace DarkMultiPlayer
                 craftLibraryWorker.workerEnabled = true;
                 screenshotWorker.workerEnabled = true;
                 SendMotdRequest();
+                SendMilestoneRequest();
                 toolbarSupport.EnableToolbar();
             }
             if (displayMotd && (HighLogic.LoadedScene != GameScenes.LOADING) && (Time.timeSinceLevelLoad > 2f))
@@ -1088,6 +1091,9 @@ namespace DarkMultiPlayer
                     case ServerMessageType.MODPACK_DATA:
                         HandleModpackData(message.data);
                         break;
+                    case ServerMessageType.MILESTONE:
+                        HandleMilestoneMessage(message.data);
+                        break;
                 default:
                         DarkLog.Debug("Unhandled message type " + message.type);
                         break;
@@ -1899,6 +1905,11 @@ namespace DarkMultiPlayer
             permissions.QueueMessage(messageData);
         }
 
+        private void HandleMilestoneMessage(ByteArray messageData)
+        {
+            milestones.QueueMessage(messageData);
+        }
+
         private void HandleWarpControl(ByteArray messageData)
         {
             warpWorker.QueueWarpMessage(messageData);
@@ -2475,6 +2486,21 @@ namespace DarkMultiPlayer
         {
             ClientMessage newMessage = new ClientMessage();
             newMessage.type = ClientMessageType.MOTD_REQUEST;
+            QueueOutgoingMessage(newMessage, true);
+        }
+        //Called from milestones
+        public void SendMilestoneRequest()
+        {
+            ClientMessage newMessage = new ClientMessage();
+            newMessage.type = ClientMessageType.MILESTONE;
+            int newMessageLength = 0;
+            using (MessageWriter mw = new MessageWriter(messageWriterBuffer))
+            {
+                mw.Write<int>((int)MilestoneMessageType.MILESTONE_REQUEST);
+                newMessageLength = (int)mw.GetMessageLength();
+            }
+            newMessage.data = ByteRecycler.GetObject(newMessageLength);
+            Array.Copy(messageWriterBuffer, 0, newMessage.data.data, 0, newMessageLength);
             QueueOutgoingMessage(newMessage, true);
         }
         //Called from FlagSyncer

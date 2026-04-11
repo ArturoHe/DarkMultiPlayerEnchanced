@@ -17,7 +17,7 @@ namespace DarkMultiPlayerCommon
         //Split messages into 8kb chunks so higher priority messages have more injection points into the TCP stream.
         public const int SPLIT_MESSAGE_LENGTH = 8192;
         //Bump this every time there is a network change (Basically, if MessageWriter or MessageReader is touched).
-        public const int PROTOCOL_VERSION = 54;
+        public const int PROTOCOL_VERSION = 55;
         //Program version. This is written in the build scripts.
         public const string PROGRAM_VERSION = "Custom";
         //Mod control version - The last version to add parts
@@ -766,6 +766,7 @@ namespace DarkMultiPlayerCommon
         SPLIT_MESSAGE,
         CONNECTION_END,
         MODPACK_DATA,
+        MILESTONE,
     }
 
     public enum MeshMessageType
@@ -810,6 +811,7 @@ namespace DarkMultiPlayerCommon
         SPLIT_MESSAGE,
         CONNECTION_END,
         MODPACK_DATA,
+        MILESTONE,
     }
 
     public enum ConnectionStatus
@@ -974,6 +976,14 @@ namespace DarkMultiPlayerCommon
         SET_OWNER,
         SET_PERMISSION_LEVEL,
         SET_GROUP,
+    }
+
+    public enum MilestoneMessageType
+    {
+        MILESTONE_RESET,
+        MILESTONE_INFO,
+        MILESTONE_REQUEST,
+        MILESTONE_SYNCED,
     }
 
     public enum ModpackDataMessageType

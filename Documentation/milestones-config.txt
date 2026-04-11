@@ -1,0 +1,45 @@
+Milestone configuration format
+
+Location at runtime:
+- Config/Milestones.txt
+
+Each non-comment line is:
+key|title|ruleType|bodyName|threshold
+
+Rule types:
+- ORBIT
+- LANDING
+- VESSEL_TYPE
+- DOCKING
+- SOI_EXIT
+- FLAG_LAT_AT_MOST
+- FLAG_LAT_AT_LEAST
+
+Examples:
+first-orbit-kerbin|Primer jugador en orbitar Kerbin|ORBIT|Kerbin|
+first-orbit-mun|Primer jugador en orbitar Mun|ORBIT|Mun|
+first-orbit-minmus|Primer jugador en orbitar Minmus|ORBIT|Minmus|
+first-orbit-eve|Primer jugador en orbitar Eve|ORBIT|Eve|
+first-orbit-duna|Primer jugador en orbitar Duna|ORBIT|Duna|
+first-orbit-jool|Primer jugador en orbitar Jool|ORBIT|Jool|
+first-land-mun|Primer jugador en aterrizar en Mun|LANDING|Mun|
+first-land-duna|Primer jugador en aterrizar en Duna|LANDING|Duna|
+first-land-tylo|Primer jugador en aterrizar en Tylo|LANDING|Tylo|
+first-eva|Primer jugador en realizar una EVA|VESSEL_TYPE|EVA|
+first-docking|Primer jugador en acoplar dos naves|DOCKING||
+first-exit-kerbin-soi|Primer jugador en salir del SOI de Kerbin|SOI_EXIT|Kerbin|
+first-flag-kerbin-south-pole|Primer jugador en plantar una bandera en el polo sur de Kerbin|FLAG_LAT_AT_MOST|Kerbin|-89
+first-flag-kerbin-north-pole|Primer jugador en plantar una bandera en el polo norte de Kerbin|FLAG_LAT_AT_LEAST|Kerbin|89
+first-flag-mun-south-pole|Primer jugador en plantar una bandera en el polo sur de Mun|FLAG_LAT_AT_MOST|Mun|-89
+first-flag-duna-equator|Primer jugador en plantar una bandera en el ecuador de Duna|FLAG_LAT_AT_MOST|Duna|0
+
+Notes:
+- The server auto-creates Config/Milestones.txt from built-in defaults if the file is missing.
+- Unlocked milestone winners are stored separately in Universe/Milestones.txt.
+- The title is what players see in the UI and chat announcement.
+- For ORBIT rules, bodyName is the celestial body being orbited.
+- For LANDING rules, the vessel situation must be LANDED or SPLASHED.
+- For VESSEL_TYPE rules, bodyName is compared against the vessel type, for example EVA.
+- For DOCKING rules, bodyName is ignored.
+- For SOI_EXIT rules, bodyName is the body the vessel must be leaving.
+- For flag latitude rules, threshold is the latitude limit in degrees.
